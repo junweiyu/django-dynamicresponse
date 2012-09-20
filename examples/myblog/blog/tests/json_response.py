@@ -24,6 +24,20 @@ class ModelWithoutSerializeFields(models.Model):
     text = models.TextField('Text')
     _password = models.CharField('Password', max_length=100)
 
+class modelWithVersionedSerializeFields(models.Model):
+    title = models.CharField('Title', max_length=200)
+    text = models.TextField('Text')
+    _password = models.CharField('Password', max_length=100)
+
+    def versioned_serialize_fields(self, version):
+        if version == 'v1':
+            return ['id']
+        return [
+            'id',
+            'title'
+        ]
+
+
 
 class JsonResponseTest(unittest.TestCase):
 
@@ -40,6 +54,14 @@ class JsonResponseTest(unittest.TestCase):
                                                                         _password='is secret')
 
         self.modelWithoutSerializeFields = JsonResponse(self.modelbaseWithoutSerializeFields)
+
+        self.modelWithVersionedSerializeFieldsV1 = JsonResponse(modelWithVersionedSerializeFields(title='Hadouken',
+                                                                            text='is said repeatedly in Street Fighter',
+                                                                            _password='is secret'), version='v1')
+
+        self.modelWithVersionedSerializeFieldsVNull = JsonResponse(modelWithVersionedSerializeFields(title='Hadouken',
+                                                                            text='is said repeatedly in Street Fighter',
+                                                                            _password='is secret'))
 
 
     def testIsInstanceOfHttpResponse(self):
@@ -64,6 +86,18 @@ class JsonResponseTest(unittest.TestCase):
 
         for key, value in result.items():
             self.assertEqual(to_equal.get(key).__str__(), value.__str__())
+
+    def testModelWithVersionedSerializeFieldsConvertsToJson(self):
+        v1_to_equal = { u'id': None }
+        vnull_to_equal = { u'id': None, u'title': u'Hadouken' }
+        v1_result = simplejson.loads(self.modelWithVersionedSerializeFieldsV1.content)
+        vnull_result = simplejson.loads(self.modelWithVersionedSerializeFieldsVNull.content)
+
+        for key, value in v1_result.items():
+            self.assertEqual(v1_to_equal.get(key).__str__(), value.__str__())
+        for key, value in vnull_result.items():
+            self.assertEqual(vnull_to_equal.get(key).__str__(), value.__str__())
+
 
     def testModelWithoutSerializeFieldsConvertsToJson(self):
         to_equal = { u'text': u'is said repeatedly in Street Fighter', u'title': u'Hadouken', u'id': None }

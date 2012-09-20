@@ -12,7 +12,7 @@ class JsonResponse(HttpResponse):
 
         # Perform JSON serialization
         if object is not None:
-            emitter = JSONEmitter(object, {}, None)
+            emitter = JSONEmitter(object, {}, None, version=kwargs.get('version', None))
             content = emitter.render()
         else:
             content = ''
