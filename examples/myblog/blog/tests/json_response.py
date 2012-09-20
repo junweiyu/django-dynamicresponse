@@ -8,7 +8,7 @@ from django.utils import simplejson
 from dynamicresponse.json_response import JsonResponse
 
 
-class modelWithSerializeFields(models.Model):
+class ModelWithSerializeFields(models.Model):
     title = models.CharField('Title', max_length=200)
     text = models.TextField('Text')
     _password = models.CharField('Password', max_length=100)
@@ -19,12 +19,12 @@ class modelWithSerializeFields(models.Model):
             'title'
         ]
 
-class modelWithoutSerializeFields(models.Model):
+class ModelWithoutSerializeFields(models.Model):
     title = models.CharField('Title', max_length=200)
     text = models.TextField('Text')
     _password = models.CharField('Password', max_length=100)
 
-class modelWithVersionedSerializeFields(models.Model):
+class ModelWithVersionedSerializeFields(models.Model):
     title = models.CharField('Title', max_length=200)
     text = models.TextField('Text')
     _password = models.CharField('Password', max_length=100)
@@ -45,21 +45,21 @@ class JsonResponseTest(unittest.TestCase):
         self.testObj = { 'testval': 99, 'testStr': 'Ice Cone', 'today': datetime(2012, 5, 17) }
         self.jsonres = JsonResponse(self.testObj)
 
-        self.modelWithSerializeFields = JsonResponse(modelWithSerializeFields(title='Hadouken',
+        self.modelWithSerializeFields = JsonResponse(ModelWithSerializeFields(title='Hadouken',
                                                                             text='is said repeatedly in Street Fighter',
                                                                             _password='is secret'))
 
-        self.modelbaseWithoutSerializeFields = modelWithoutSerializeFields(title='Hadouken',
+        self.modelbaseWithoutSerializeFields = ModelWithoutSerializeFields(title='Hadouken',
                                                                         text='is said repeatedly in Street Fighter',
                                                                         _password='is secret')
 
         self.modelWithoutSerializeFields = JsonResponse(self.modelbaseWithoutSerializeFields)
 
-        self.modelWithVersionedSerializeFieldsV1 = JsonResponse(modelWithVersionedSerializeFields(title='Hadouken',
+        self.modelWithVersionedSerializeFieldsV1 = JsonResponse(ModelWithVersionedSerializeFields(title='Hadouken',
                                                                             text='is said repeatedly in Street Fighter',
                                                                             _password='is secret'), version='v1')
 
-        self.modelWithVersionedSerializeFieldsVNull = JsonResponse(modelWithVersionedSerializeFields(title='Hadouken',
+        self.modelWithVersionedSerializeFieldsVNull = JsonResponse(ModelWithVersionedSerializeFields(title='Hadouken',
                                                                             text='is said repeatedly in Street Fighter',
                                                                             _password='is secret'))
 
