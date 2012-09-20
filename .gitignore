@@ -1,5 +1,8 @@
+*.egg*
 *.pyc
-build
+.DS_Store
+.idea
+build/
+dist/
+examples/myblog/myblog.db
 MANIFEST
-dist
-examples/myblog/myblog
