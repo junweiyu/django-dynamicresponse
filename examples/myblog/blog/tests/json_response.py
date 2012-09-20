@@ -24,7 +24,7 @@ class ModelWithoutSerializeFields(models.Model):
     text = models.TextField('Text')
     _password = models.CharField('Password', max_length=100)
 
-class modelWithVersionedSerializeFields(models.Model):
+class ModelWithVersionedSerializeFields(models.Model):
     title = models.CharField('Title', max_length=200)
     text = models.TextField('Text')
     _password = models.CharField('Password', max_length=100)
@@ -55,11 +55,11 @@ class JsonResponseTest(unittest.TestCase):
 
         self.modelWithoutSerializeFields = JsonResponse(self.modelbaseWithoutSerializeFields)
 
-        self.modelWithVersionedSerializeFieldsV1 = JsonResponse(modelWithVersionedSerializeFields(title='Hadouken',
+        self.modelWithVersionedSerializeFieldsV1 = JsonResponse(ModelWithVersionedSerializeFields(title='Hadouken',
                                                                             text='is said repeatedly in Street Fighter',
                                                                             _password='is secret'), version='v1')
 
-        self.modelWithVersionedSerializeFieldsVNull = JsonResponse(modelWithVersionedSerializeFields(title='Hadouken',
+        self.modelWithVersionedSerializeFieldsVNull = JsonResponse(ModelWithVersionedSerializeFields(title='Hadouken',
                                                                             text='is said repeatedly in Street Fighter',
                                                                             _password='is secret'))
 
