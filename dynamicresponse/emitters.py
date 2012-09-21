@@ -99,6 +99,10 @@ class Emitter(object):
             elif inspect.isfunction(thing):
                 if not inspect.getargspec(thing)[0]:
                     ret = _any(thing())
+            elif hasattr(thing, '__versioned_emittable__'):
+                f = thing.__versioned_emittable__
+                if inspect.ismethod(f) and len(inspect.getargspec(f)[0]) == 2:
+                    ret = _any(f(self.version))
             elif hasattr(thing, '__emittable__'):
                 f = thing.__emittable__
                 if inspect.ismethod(f) and len(inspect.getargspec(f)[0]) == 1:
