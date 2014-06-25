@@ -2,9 +2,9 @@
 This file is based on source code from django-piston, available at the following URL:
 http://bitbucket.org/jespern/django-piston
 """
-import json
-
 from __future__ import generators
+
+import json
 from django.db.models.query import QuerySet
 from django.db.models import Model, permalink
 from django.utils.xmlutils import SimplerXMLGenerator
